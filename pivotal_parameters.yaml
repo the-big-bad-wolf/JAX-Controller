@@ -12,10 +12,8 @@ neural_net:
   weight_bias_initial_range: [0, 1]
   activation_function: sigmoid # sigmoid/tanh/relu
 
-epochs:
-  training_epochs: 10
-  timesteps_per_epoch: 100
-
+epochs: 100
+timesteps: 1000
 learning_rate: 0.01
 noise: [-0.01, 0.01]
 

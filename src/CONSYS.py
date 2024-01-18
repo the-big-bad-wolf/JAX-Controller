@@ -4,7 +4,7 @@ import random
 import numpy as np
 
 
-class CONSENSYS:
+class CONSYS:
     def __init__(
         self,
         controller: Controller,
@@ -18,8 +18,9 @@ class CONSENSYS:
         self.plant = plant
         self.target = target
         self.noise = noise
+        self.epochs = epochs
+        self.timesteps = timesteps
         self.MSE_history: list[float] = []
-        pass
 
     def random_vector(self, min: float, max: float, timesteps: int):
         noise: list[float] = []
@@ -42,12 +43,13 @@ class CONSENSYS:
         U = self.controller.U
         Y = self.plant.update(U, D)
         error = abs(self.target - Y)
-        self.controller.calculate_U(0, [0], 0)
+        self.controller.update_U(0, [0], 0)
         return error
 
-    def start(self, epochs: int, timesteps: int):
-        for _ in range(epochs):
-            epoch_errors = self.run_epoch(timesteps)
-            self.controller.update(epoch_errors)
+    def start(self):
+        for _ in range(self.epochs):
+            self.plant.reset()
+            epoch_errors = self.run_epoch(self.timesteps)
+            self.controller.update_weights(epoch_errors)
             MSE = self.MSE(epoch_errors)
             self.MSE_history.append(MSE)
