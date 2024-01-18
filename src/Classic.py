@@ -7,3 +7,6 @@ class Classic(Controller):
 
     def update(self, error_history: list[float]):
         pass
+
+    def calculate_U(self, E: float, gradient: list[float], sum_epoch_errors: float):
+        pass
