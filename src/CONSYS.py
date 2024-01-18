@@ -50,6 +50,6 @@ class CONSYS:
         for _ in range(self.epochs):
             self.plant.reset()
             epoch_errors = self.run_epoch(self.timesteps)
-            self.controller.update_weights(epoch_errors)
             MSE = self.MSE(epoch_errors)
             self.MSE_history.append(MSE)
+            # self.controller.update_weights(MSE_gradient)
