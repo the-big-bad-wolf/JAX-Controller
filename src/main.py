@@ -2,6 +2,7 @@ import yaml
 from Bathtub import Bathtub
 from Classic import Classic
 from CONSYS import CONSYS
+import matplotlib.pyplot as plt
 
 with open("pivotal_parameters.yaml", "r") as file:
     params = yaml.safe_load(file)
@@ -17,7 +18,8 @@ with open("pivotal_parameters.yaml", "r") as file:
             kp = float(classic_params["Kp"])
             ki = float(classic_params["Ki"])
             kd = float(classic_params["Kd"])
-            controller = Classic([kp, ki, kd], 0)
+            learning_rate = float(params["learning_rate"])
+            controller = Classic(0, [kp, ki, kd], learning_rate)
         case _:
             print("No valid controller")
             exit()
@@ -35,3 +37,7 @@ with open("pivotal_parameters.yaml", "r") as file:
 
     system = CONSYS(controller, plant, target, noise, epochs, timesteps)
     system.start()
+    plt.plot(system.MSE_history)
+    plt.show()
+    plt.plot(system.param_history, label=["Kp", "Ki", "Kd"])
+    plt.show()
