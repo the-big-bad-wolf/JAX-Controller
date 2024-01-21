@@ -9,13 +9,10 @@ class Bathtub(Plant):
         self.C = C
         self.h = H0
 
-    def update(self, U: float, D: float):
+    def update(self, u: float, d: float):
         v = (2 * Bathtub.G * self.h) ** 0.5
-        Q = v * self.C
-        db = U + D - Q
+        q = v * self.C
+        db = u + d - q
         dh = db / self.A
         self.h = self.h + dh
         return self.h
-
-    def reset(self):
-        pass

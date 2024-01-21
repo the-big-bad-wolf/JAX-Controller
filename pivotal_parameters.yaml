@@ -15,7 +15,7 @@ neural_net:
 epochs: 30
 timesteps: 25
 learning_rate: 0.05
-noise: [-0.01, 0.01]
+noise: [-5, 5]
 
 bathtub:
   A: 100

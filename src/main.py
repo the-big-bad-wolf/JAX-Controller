@@ -1,3 +1,4 @@
+import jax.numpy as jnp
 import yaml
 from Bathtub import Bathtub
 from Classic import Classic
@@ -19,7 +20,7 @@ with open("pivotal_parameters.yaml", "r") as file:
             ki = float(classic_params["Ki"])
             kd = float(classic_params["Kd"])
             learning_rate = float(params["learning_rate"])
-            controller = Classic(0, [kp, ki, kd], learning_rate)
+            controller = Classic(0, jnp.array([kp, ki, kd]), learning_rate)
         case _:
             print("No valid controller")
             exit()
@@ -51,3 +52,5 @@ with open("pivotal_parameters.yaml", "r") as file:
     plt.ylabel("Parameter Value")
     plt.legend(["Kp", "Ki", "Kd"])
     plt.show()
+
+    file.close()
