@@ -37,7 +37,17 @@ with open("pivotal_parameters.yaml", "r") as file:
 
     system = CONSYS(controller, plant, target, noise, epochs, timesteps)
     system.start()
+
+    plt.figure(1)
+    plt.title("Learning Progression")
     plt.plot(system.MSE_history)
-    plt.show()
-    plt.plot(system.param_history, label=["Kp", "Ki", "Kd"])
+    plt.xlabel("Epoch")
+    plt.ylabel("Mean Squared Error")
+
+    plt.figure(2)
+    plt.title("Control Parameters")
+    plt.plot(system.param_history)
+    plt.xlabel("Epoch")
+    plt.ylabel("Parameter Value")
+    plt.legend(["Kp", "Ki", "Kd"])
     plt.show()
