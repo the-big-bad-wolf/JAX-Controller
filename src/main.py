@@ -28,7 +28,7 @@ with open("pivotal_parameters.yaml", "r") as file:
             A = float(bathtub_params["A"])
             C = float(bathtub_params["C"])
             target = float(bathtub_params["H0"])
-            plant = Bathtub()
+            plant = Bathtub(A, C, target)
         case _:
             print("No valid plant.")
             exit()
