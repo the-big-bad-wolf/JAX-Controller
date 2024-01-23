@@ -33,7 +33,6 @@ class CONSYS:
             MSE, gradients = jax_run_epoch(
                 self.controller.weights, plant_copy, controller_copy
             )
-            print("gradients: ", gradients)
             self.MSE_history.append(MSE)
             self.param_history.append(copy.deepcopy(self.controller.weights))
             self.controller.update_weights(gradients)
