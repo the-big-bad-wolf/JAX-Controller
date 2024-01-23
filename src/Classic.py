@@ -10,7 +10,7 @@ class Classic(Controller):
         self.Ki = weights[1]
         self.Kd = weights[2]
 
-    def update_weights(self, gradients: list[float]):
+    def update_weights(self, gradients: jax.Array):
         self.Kp -= self.learning_rate * gradients[0]  # Kp
         self.Ki -= self.learning_rate * gradients[1]  # Ki
         self.Kd -= self.learning_rate * gradients[2]  # Kd

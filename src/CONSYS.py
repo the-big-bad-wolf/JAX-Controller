@@ -42,8 +42,7 @@ class CONSYS:
         noise = self.random_vector()
         errors: jax.Array = jnp.array([])
         for i in range(self.timesteps):
-            error = self.run_timestep(noise[i], errors, plant, controller)
-            errors = jnp.append(errors, error)
+            errors = self.run_timestep(noise[i], errors, plant, controller)
         MSE = self.MSE(errors)
         return MSE
 
@@ -57,8 +56,9 @@ class CONSYS:
         u = controller.u
         y = plant.update(u, d)
         error = abs(self.target - y)
+        errors = jnp.append(errors, error)
         controller.update_U(errors, controller.weights)
-        return error
+        return errors
 
     def random_vector(self):
         noise: list[float] = []
