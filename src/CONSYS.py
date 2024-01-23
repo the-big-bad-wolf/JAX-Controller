@@ -33,6 +33,7 @@ class CONSYS:
             MSE, gradients = jax_run_epoch(
                 self.controller.weights, plant_copy, controller_copy
             )
+            print("gradients: ", gradients)
             self.MSE_history.append(MSE)
             self.param_history.append(copy.deepcopy(self.controller.weights))
             self.controller.update_weights(gradients)
@@ -56,9 +57,9 @@ class CONSYS:
         u = controller.u
         y = plant.update(u, d)
         error = abs(self.target - y)
-        errors = jnp.append(errors, error)
-        controller.update_U(errors, controller.weights)
-        return errors
+        new_errors = jnp.append(errors, error)
+        controller.update_U(new_errors, controller.weights)
+        return new_errors
 
     def random_vector(self):
         noise: list[float] = []

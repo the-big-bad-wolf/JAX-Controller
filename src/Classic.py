@@ -16,10 +16,10 @@ class Classic(Controller):
         self.Kd -= self.learning_rate * gradients[2]  # Kd
         self.weights = jnp.array([self.Kp, self.Ki, self.Kd])
 
-    def update_U(self, errors: jax.Array, weights: list[float]):
-        if len(errors) < 2:
+    def update_U(self, errors: jax.Array, weights: jax.Array):
+        if errors.size < 2:
             return
         Kp = weights[0]
         Ki = weights[1]
         Kd = weights[2]
-        self.u = Kp * errors[-1] + Ki * sum(errors) + Kd * (errors[-1] - errors[-2])
+        self.u = Kp * errors[-1] + Ki * jnp.sum(errors) + Kd * (errors[-1] - errors[-2])

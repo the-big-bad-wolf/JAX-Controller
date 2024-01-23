@@ -2,9 +2,9 @@ plant: cournot # bathtub/cournot
 controller: classic # classic/ai
 
 classic:
-  Kp: 0.1
-  Ki: 0.3
-  Kd: 0.2
+  Kp: 0.04
+  Ki: 0.03
+  Kd: 0.03
 
 neural_net:
   layers: 5
@@ -12,19 +12,19 @@ neural_net:
   weight_bias_initial_range: [0, 1]
   activation_function: sigmoid # sigmoid/tanh/relu
 
-epochs: 20
-timesteps: 25
+epochs: 17
+timesteps: 40
 learning_rate: 0.05
 noise: [-0.01, 0.01]
 
 bathtub:
-  A: 100
-  C: 1
-  H0: 10
+  A: 10000
+  C: 2000
+  H0: 213
 
 cournot:
-  p_max: 0.9
+  p_max: 1
   cm: 0.1
-  q_1: 0.1 # Initial value
-  q_2: 0.1 # Initial value
+  q_1: 0.5 # Initial value
+  q_2: 0.5 # Initial value
   profit_target: 0.5
