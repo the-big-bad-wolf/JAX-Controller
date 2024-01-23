@@ -1,8 +1,12 @@
 import jax.numpy as jnp
+from jax.nn import sigmoid, relu
+from jax.numpy import tanh
+import jax
 import yaml
 from Bathtub import Bathtub
 from Cournot import Cournot
 from Classic import Classic
+from AI import AI
 from CONSYS import CONSYS
 import matplotlib.pyplot as plt
 
@@ -22,6 +26,40 @@ with open("pivotal_parameters.yaml", "r") as file:
             kd = float(classic_params["Kd"])
             learning_rate = float(params["learning_rate"])
             controller = Classic(0, jnp.array([kp, ki, kd]), learning_rate)
+        case "AI":
+            neural_net_params = params["neural_net"]
+            layers = int(neural_net_params["layers"])
+            neurons_per_layer = int(neural_net_params["neurons_per_layer"])
+            weight_bias_initial_range = neural_net_params["weight_bias_initial_range"]
+            activation_function = str(neural_net_params["activation_function"])
+            learning_rate = float(params["learning_rate"])
+
+            weights = random_matrix = jax.random.uniform(
+                jax.random.PRNGKey(0),
+                shape=(layers, neurons_per_layer),
+                minval=weight_bias_initial_range[0],
+                maxval=weight_bias_initial_range[1],
+            )
+
+            match activation_function:
+                case "sigmoid":
+                    activation_function = sigmoid
+                case "relu":
+                    activation_function = relu
+                case "tanh":
+                    activation_function = tanh
+                case _:
+                    print("No valid activation function.")
+                    exit()
+
+            controller = AI(
+                0,
+                weights,
+                learning_rate,
+                layers,
+                neurons_per_layer,
+                activation_function,
+            )
         case _:
             print("No valid controller")
             exit()

@@ -1,5 +1,5 @@
 plant: cournot # bathtub/cournot
-controller: classic # classic/ai
+controller: AI # classic/AI
 
 classic:
   Kp: 0.04
@@ -9,8 +9,8 @@ classic:
 neural_net:
   layers: 5
   neurons_per_layer: 10
-  weight_bias_initial_range: [0, 1]
-  activation_function: sigmoid # sigmoid/tanh/relu
+  weight_bias_initial_range: [-20, 35]
+  activation_function: relu # sigmoid/tanh/relu
 
 epochs: 17
 timesteps: 40
