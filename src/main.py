@@ -34,13 +34,71 @@ with open("pivotal_parameters.yaml", "r") as file:
             activation_function = str(neural_net_params["activation_function"])
             learning_rate = float(params["learning_rate"])
 
-            weights = random_matrix = jax.random.uniform(
+            # Input layer
+            weights = jax.random.uniform(
                 jax.random.PRNGKey(0),
-                shape=(layers, neurons_per_layer),
+                shape=(1, 3, 3),
                 minval=weight_bias_initial_range[0],
                 maxval=weight_bias_initial_range[1],
             )
+            # Hidden layers
+            weights = jnp.append(
+                weights,
+                jax.random.uniform(
+                    jax.random.PRNGKey(1),
+                    shape=(1, neurons_per_layer, 3),
+                    minval=weight_bias_initial_range[0],
+                    maxval=weight_bias_initial_range[1],
+                ),
+            )
+            weights = jnp.append(
+                weights,
+                jax.random.uniform(
+                    jax.random.PRNGKey(2),
+                    shape=(layers - 1, neurons_per_layer, neurons_per_layer),
+                    minval=weight_bias_initial_range[0],
+                    maxval=weight_bias_initial_range[1],
+                ),
+            )
+            # Output layer
+            weights = jnp.append(
+                weights,
+                jax.random.uniform(
+                    jax.random.PRNGKey(3),
+                    shape=(1, 1, neurons_per_layer),
+                    minval=weight_bias_initial_range[0],
+                    maxval=weight_bias_initial_range[1],
+                ),
+            )
+            # Input layer
+            biases = jax.random.uniform(
+                jax.random.PRNGKey(4),
+                shape=(1, 3),
+                minval=weight_bias_initial_range[0],
+                maxval=weight_bias_initial_range[1],
+            )
+            # Hidden layers
+            biases = jnp.append(
+                biases,
+                jax.random.uniform(
+                    jax.random.PRNGKey(5),
+                    shape=(layers, neurons_per_layer),
+                    minval=weight_bias_initial_range[0],
+                    maxval=weight_bias_initial_range[1],
+                ),
+            )
+            # Output layer
+            biases = jnp.append(
+                biases,
+                jax.random.uniform(
+                    jax.random.PRNGKey(6),
+                    shape=(1, 1),
+                    minval=weight_bias_initial_range[0],
+                    maxval=weight_bias_initial_range[1],
+                ),
+            )
 
+            print("Weights: ", weights)
             match activation_function:
                 case "sigmoid":
                     activation_function = sigmoid
@@ -55,10 +113,11 @@ with open("pivotal_parameters.yaml", "r") as file:
             controller = AI(
                 0,
                 weights,
-                learning_rate,
+                biases,
                 layers,
                 neurons_per_layer,
                 activation_function,
+                learning_rate,
             )
         case _:
             print("No valid controller")
