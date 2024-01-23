@@ -1,6 +1,7 @@
 import jax.numpy as jnp
 import yaml
 from Bathtub import Bathtub
+from Cournot import Cournot
 from Classic import Classic
 from CONSYS import CONSYS
 import matplotlib.pyplot as plt
@@ -32,6 +33,14 @@ with open("pivotal_parameters.yaml", "r") as file:
             C = float(bathtub_params["C"])
             target = float(bathtub_params["H0"])
             plant = Bathtub(A, C, target)
+        case "cournot":
+            cournot_params = params["cournot"]
+            p_max = float(cournot_params["p_max"])
+            cm = float(cournot_params["cm"])
+            q_1 = float(cournot_params["q_1"])
+            q_2 = float(cournot_params["q_2"])
+            target = float(cournot_params["profit_target"])
+            plant = Cournot(p_max, cm, q_1, q_2)
         case _:
             print("No valid plant.")
             exit()
