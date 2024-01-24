@@ -13,5 +13,5 @@ class Controller(ABC):
         pass
 
     @abstractmethod
-    def update_U(self, errors: jax.Array, weights: jax.Array):
+    def calculate_U(self, errors: jax.Array, weights: jax.Array):
         pass

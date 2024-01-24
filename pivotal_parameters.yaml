@@ -2,9 +2,9 @@ plant: cournot # bathtub/cournot
 controller: classic # classic/AI
 
 classic:
-  Kp: 0.04
-  Ki: 0.03
-  Kd: 0.03
+  Kp: 0.4
+  Ki: 0.5
+  Kd: 0.6
 
 neural_net:
   layers: 3

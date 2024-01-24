@@ -2,6 +2,7 @@ import jax.numpy as jnp
 from jax.nn import sigmoid, relu
 from jax.numpy import tanh
 import jax
+import numpy as np
 import yaml
 from Bathtub import Bathtub
 from Cournot import Cournot
@@ -28,49 +29,32 @@ with open("pivotal_parameters.yaml", "r") as file:
             controller = Classic(0, jnp.array([kp, ki, kd]), learning_rate)
         case "AI":
             neural_net_params = params["neural_net"]
-            layers = int(neural_net_params["layers"])
+            nr_hidden_layers = int(neural_net_params["layers"])
             neurons_per_layer = int(neural_net_params["neurons_per_layer"])
             weight_bias_initial_range = neural_net_params["weight_bias_initial_range"]
             activation_function = str(neural_net_params["activation_function"])
             learning_rate = float(params["learning_rate"])
 
-            # First hidden layer
-            first_hidden_weights = jax.random.uniform(
-                jax.random.PRNGKey(0),
-                shape=(neurons_per_layer, 3),
-                minval=weight_bias_initial_range[0],
-                maxval=weight_bias_initial_range[1],
-            )
-            # Rest of hidden layers
-            hidden_weights = jax.random.uniform(
-                jax.random.PRNGKey(1),
-                shape=(layers - 1, neurons_per_layer, neurons_per_layer),
-                minval=weight_bias_initial_range[0],
-                maxval=weight_bias_initial_range[1],
-            )
+            layers = [3] + [neurons_per_layer for _ in range(nr_hidden_layers)] + [1]
 
-            # Output layer
-            output_weights = jax.random.uniform(
-                jax.random.PRNGKey(2),
-                shape=(1, 1, neurons_per_layer),
-                minval=weight_bias_initial_range[0],
-                maxval=weight_bias_initial_range[1],
-            )
+            def gen_weights_bias(layers):
+                sender = layers[0]
+                weights_and_bias = []
+                for receiever in layers[1:]:
+                    weights = np.random.uniform(
+                        weight_bias_initial_range[0],
+                        weight_bias_initial_range[1],
+                        (sender, receiever),
+                    )
+                    biases = np.random.uniform(
+                        weight_bias_initial_range[0],
+                        weight_bias_initial_range[1],
+                        (1, receiever),
+                    )
+                    sender = receiever
+                    weights_and_bias.append([weights, biases])
+                return weights_and_bias
 
-            # Hidden layers
-            biases = jax.random.uniform(
-                jax.random.PRNGKey(3),
-                shape=(layers + 1, neurons_per_layer),
-                minval=weight_bias_initial_range[0],
-                maxval=weight_bias_initial_range[1],
-            )
-            # Output bias
-            output_bias = jax.random.uniform(
-                jax.random.PRNGKey(3),
-                shape=(1, 1),
-                minval=weight_bias_initial_range[0],
-                maxval=weight_bias_initial_range[1],
-            )
             match activation_function:
                 case "sigmoid":
                     activation_function = sigmoid
@@ -82,18 +66,11 @@ with open("pivotal_parameters.yaml", "r") as file:
                     print("No valid activation function.")
                     exit()
 
-            weights = [
-                first_hidden_weights,
-                hidden_weights,
-                output_weights,
-                biases,
-                output_bias,
-            ]
+            weights = gen_weights_bias(layers)
+
             controller = AI(
                 0,
                 weights,
-                layers,
-                neurons_per_layer,
                 activation_function,
                 learning_rate,
             )
