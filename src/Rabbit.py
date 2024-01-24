@@ -29,4 +29,7 @@ class Rabbit(Plant):
         wolfs += (
             self.wolf_food_rate * rabbits * wolfs - self.wolf_death_rate * wolfs + u
         )
+
+        rabbits = max(0, rabbits)
+        wolfs = max(0, wolfs)
         return rabbits, [rabbits, wolfs]

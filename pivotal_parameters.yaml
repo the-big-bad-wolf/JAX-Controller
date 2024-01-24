@@ -1,9 +1,9 @@
-plant: cournot # bathtub/cournot/rabbit
-controller: AI # classic/AI
+plant: rabbit # bathtub/cournot/rabbit
+controller: classic # classic/AI
 
 classic:
-  Kp: 0.4
-  Ki: 0.4
+  Kp: 0.6
+  Ki: 0.5
   Kd: 0.4
 
 neural_net:
@@ -30,10 +30,10 @@ cournot:
   profit_target: 0.5
 
 rabbit:
-  initial_rabbits: 100000
-  rabbit_birth_rate: 0.7
-  rabbit_eaten_rate: 0.03
-  initial_wolves: 10
+  initial_rabbits: 1000
+  rabbit_birth_rate: 2.1
+  rabbit_eaten_rate: 0.3
+  initial_wolves: 15
   wolf_death_rate: 0.1
-  wolf_food_rate: 0.01
-  target_rabbits: 2000
+  wolf_food_rate: 0.5
+  target_rabbits: 20000
