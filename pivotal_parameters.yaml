@@ -1,26 +1,26 @@
-plant: cournot # bathtub/cournot
-controller: classic # classic/AI
+plant: cournot # bathtub/cournot/rabbit
+controller: AI # classic/AI
 
 classic:
   Kp: 0.4
-  Ki: 0.5
-  Kd: 0.6
+  Ki: 0.4
+  Kd: 0.4
 
 neural_net:
-  layers: 3
-  neurons_per_layer: 5
+  layers: 5
+  neurons_per_layer: 40
   weight_bias_initial_range: [-1, 1]
-  activation_function: sigmoid # sigmoid/tanh/relu
+  activation_function: relu # sigmoid/tanh/relu
 
-epochs: 17
-timesteps: 40
-learning_rate: 0.05
-noise: [-0.01, 0.01]
+epochs: 50
+timesteps: 25
+learning_rate: 0.2
+noise: [-1, 1]
 
 bathtub:
-  A: 10000
-  C: 2000
-  H0: 213
+  A: 100
+  C: 1
+  H0: 10
 
 cournot:
   p_max: 1
@@ -28,3 +28,12 @@ cournot:
   q_1: 0.5 # Initial value
   q_2: 0.5 # Initial value
   profit_target: 0.5
+
+rabbit:
+  initial_rabbits: 100000
+  rabbit_birth_rate: 0.7
+  rabbit_eaten_rate: 0.03
+  initial_wolves: 10
+  wolf_death_rate: 0.1
+  wolf_food_rate: 0.01
+  target_rabbits: 2000

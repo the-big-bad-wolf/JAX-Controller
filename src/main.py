@@ -5,6 +5,7 @@ import jax
 import numpy as np
 import yaml
 from Bathtub import Bathtub
+from Rabbit import Rabbit
 from Cournot import Cournot
 from Classic import Classic
 from AI import AI
@@ -14,12 +15,12 @@ import matplotlib.pyplot as plt
 with open("pivotal_parameters.yaml", "r") as file:
     params = yaml.safe_load(file)
     plant = str(params["plant"])
-    controller = str(params["controller"])
+    controller_name = str(params["controller"])
     noise = params["noise"]
     epochs = int(params["epochs"])
     timesteps = int(params["timesteps"])
 
-    match controller:
+    match controller_name:
         case "classic":
             classic_params = params["classic"]
             kp = float(classic_params["Kp"])
@@ -93,6 +94,23 @@ with open("pivotal_parameters.yaml", "r") as file:
             q_2 = float(cournot_params["q_2"])
             target = float(cournot_params["profit_target"])
             plant = Cournot(p_max, cm, q_1, q_2)
+        case "rabbit":
+            rabbit_params = params["rabbit"]
+            initial_rabbits = float(rabbit_params["initial_rabbits"])
+            rabbit_birth_rate = float(rabbit_params["rabbit_birth_rate"])
+            rabbit_eaten_rate = float(rabbit_params["rabbit_eaten_rate"])
+            initial_wolves = float(rabbit_params["initial_wolves"])
+            wolf_death_rate = float(rabbit_params["wolf_death_rate"])
+            wolf_food_rate = float(rabbit_params["wolf_food_rate"])
+            target = float(rabbit_params["target_rabbits"])
+            plant = Rabbit(
+                initial_rabbits,
+                rabbit_birth_rate,
+                rabbit_eaten_rate,
+                initial_wolves,
+                wolf_death_rate,
+                wolf_food_rate,
+            )
         case _:
             print("No valid plant.")
             exit()
@@ -106,12 +124,13 @@ with open("pivotal_parameters.yaml", "r") as file:
     plt.xlabel("Epoch")
     plt.ylabel("Mean Squared Error")
 
-    plt.figure(2)
-    plt.title("Control Parameters")
-    plt.plot(system.param_history)
-    plt.xlabel("Epoch")
-    plt.ylabel("Parameter Value")
-    plt.legend(["Kp", "Ki", "Kd"])
-    plt.show()
+    if controller_name == "classic":
+        plt.figure(2)
+        plt.title("Control Parameters")
+        plt.plot(system.param_history)
+        plt.xlabel("Epoch")
+        plt.ylabel("Parameter Value")
+        plt.legend(["Kp", "Ki", "Kd"])
 
+    plt.show()
     file.close()
