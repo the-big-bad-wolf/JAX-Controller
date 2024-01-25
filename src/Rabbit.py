@@ -18,18 +18,19 @@ class Rabbit(Plant):
         self.wolf_food_rate = wolf_food_rate
 
     def update(self, u: float, d: float):
-        rabbits = self.old_state[0]
-        wolfs = self.old_state[1]
+        old_rabbits = self.old_state[0]
+        old_wolves = self.old_state[1]
 
-        rabbits += (
-            self.rabbit_birth_rate * rabbits
-            - self.rabbit_eaten_rate * rabbits * wolfs
+        new_rabbits = old_rabbits + (
+            self.rabbit_birth_rate * old_rabbits
+            - self.rabbit_eaten_rate * old_rabbits * old_wolves
+            + u
+        )
+        new_wolves = old_wolves + (
+            self.wolf_food_rate * old_rabbits * old_wolves
+            - self.wolf_death_rate * old_wolves
             + d
         )
-        wolfs += (
-            self.wolf_food_rate * rabbits * wolfs - self.wolf_death_rate * wolfs + u
-        )
-
-        rabbits = max(0, rabbits)
-        wolfs = max(0, wolfs)
-        return rabbits, [rabbits, wolfs]
+        new_rabbits = max(0, new_rabbits)
+        new_wolves = max(0, new_wolves)
+        return new_rabbits, [new_rabbits, new_wolves]

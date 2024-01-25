@@ -15,4 +15,5 @@ class Bathtub(Plant):
         db = u + d - q
         dh = db / self.A
         y = self.old_state + dh
+        y = max(y, 0)
         return y, y
