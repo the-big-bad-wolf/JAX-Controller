@@ -1,7 +1,6 @@
 import jax.numpy as jnp
 from jax.nn import sigmoid, relu
 from jax.numpy import tanh
-import jax
 import numpy as np
 import yaml
 from Bathtub import Bathtub

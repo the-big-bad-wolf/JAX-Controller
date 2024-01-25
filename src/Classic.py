@@ -22,4 +22,6 @@ class Classic(Controller):
         Kp = weights[0]
         Ki = weights[1]
         Kd = weights[2]
-        return Kp * errors[-1] + Ki * jnp.sum(errors) + Kd * (errors[-1] - errors[-2])
+        return (
+            Kp * errors[-1] + Ki * jnp.sum(errors) + Kd * (errors[-1] - errors[-2])
+        ).astype(float)

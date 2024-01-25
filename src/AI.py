@@ -29,12 +29,13 @@ class AI(Controller):
         features = jnp.array([last_error, sum_error, derivative_error])
         activations = features
 
-        for i in range(weights_and_bias):
+        for i in range(len(weights_and_bias)):
             weights, biases = weights_and_bias[i]
+
             if i == len(weights_and_bias) - 1:
-                activations = jnp.dot(activations, weights) + biases
+                activations: jax.Array = jnp.dot(activations, weights) + biases
             else:
                 activations = self.activation_function(
                     jnp.dot(activations, weights) + biases
                 )
-        return activations
+        return activations.astype(float)

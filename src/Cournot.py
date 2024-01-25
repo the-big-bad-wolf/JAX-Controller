@@ -1,4 +1,5 @@
 from Plant import Plant
+import jax.numpy as jnp
 
 
 class Cournot(Plant):
@@ -16,14 +17,8 @@ class Cournot(Plant):
         q_1 += u
         q_2 += d
 
-        if q_1 < 0:
-            q_1 = 0
-        elif q_1 > 1:
-            q_1 = 1
-        if q_2 < 0:
-            q_2 = 0
-        elif q_2 > 1:
-            q_2 = 1
+        q_1 = jnp.clip(q_1, 0, 1).astype(float)
+        q_2 = jnp.clip(q_1, 0, 1).astype(float)
 
         q = q_1 + q_2
         p = self.p_max - q
