@@ -60,7 +60,7 @@ class CONSYS:
         controller: Controller,
     ):
         y, old_state = plant.update(controller.u, d)
-        error = abs(self.target - y)
+        error = self.target - y
         new_errors = jnp.append(errors, error)
         u = controller.calculate_U(new_errors, controller.weights)
         return new_errors, u, old_state
