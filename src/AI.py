@@ -11,9 +11,7 @@ class AI(Controller):
         activation_function,
         learning_rate: float,
     ):
-        self.u = initital_U
-        self.learning_rate = learning_rate
-        self.weights = weights
+        super().__init__(weights, initital_U, learning_rate)
         self.activation_function = activation_function
 
     def update_weights(self, gradients: jax.Array):
@@ -22,7 +20,7 @@ class AI(Controller):
             for (w, b), (dw, db) in zip(self.weights, gradients)
         ]
 
-    def calculate_U(self, errors: jax.Array, weights_and_bias: jax.Array):
+    def update_U(self, errors: jax.Array, weights_and_bias: jax.Array):
         last_error = errors[-1]
         sum_error = jnp.sum(errors)
         derivative_error = errors[-1] - errors[-2]
@@ -38,4 +36,4 @@ class AI(Controller):
                 activations = self.activation_function(
                     jnp.dot(activations, weights) + biases
                 )
-        return activations.astype(float)
+        self.u = activations.astype(float)

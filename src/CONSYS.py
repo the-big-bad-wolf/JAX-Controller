@@ -38,17 +38,11 @@ class CONSYS:
             self.controller.update_weights(gradients)
 
     def run_epoch(self, weights: jax.Array, plant: Plant, controller: Controller):
-        controller = copy.deepcopy(controller)
-        plant = copy.deepcopy(plant)
         controller.weights = weights
         noise = self.random_vector()
         errors: jax.Array = jnp.array([])
         for i in range(self.timesteps):
-            errors, u, old_state = self.run_timestep(
-                noise[i], errors, plant, controller
-            )
-            controller.u = u
-            plant.old_state = old_state
+            errors = self.run_timestep(noise[i], errors, plant, controller)
         MSE = self.MSE(errors)
         return MSE
 
@@ -59,11 +53,11 @@ class CONSYS:
         plant: Plant,
         controller: Controller,
     ):
-        y, old_state = plant.update(controller.u, d)
-        error = self.target - y
-        new_errors = jnp.append(errors, error)
-        u = controller.calculate_U(new_errors, controller.weights)
-        return new_errors, u, old_state
+        plant.update(controller.u, d)
+        error = self.target - plant.y
+        errors = jnp.append(errors, error)
+        controller.update_U(errors, controller.weights)
+        return errors
 
     def random_vector(self):
         noise: list[float] = []

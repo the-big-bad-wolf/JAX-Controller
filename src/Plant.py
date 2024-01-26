@@ -3,9 +3,9 @@ from typing import Any, Tuple
 
 
 class Plant(ABC):
-    def __init__(self, old_state):
-        self.old_state = old_state
+    def __init__(self, y: float):
+        self.y = y
 
     @abstractmethod
-    def update(self, u: float, d: float) -> Tuple[Any, Any]:
+    def update(self, u: float, d: float):
         pass
