@@ -4,12 +4,12 @@ from Plant import Plant
 class Rabbit(Plant):
     def __init__(
         self,
+        initial_rabbits: float,
         rabbit_birth_rate: float,
         rabbit_eaten_rate: float,
-        initial_rabbits: float,
+        initial_wolves: float,
         wolf_death_rate: float,
         wolf_food_rate: float,
-        initial_wolves: float,
     ):
         self.rabbits = initial_rabbits
         self.wolves = initial_wolves
